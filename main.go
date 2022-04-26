@@ -1,14 +1,16 @@
 package main
 
 import (
-    "database/sql"
-    "encoding/json"
-    "fmt"
-    "log"
-    "net/http"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"log"
+	"main/utils"
+	"net/http"
+	"utils"
 
-    "github.com/gorilla/mux"
-    _ "github.com/lib/pq"
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 )
 
 const (
@@ -32,19 +34,25 @@ type JsonResponse struct {
     Data    []Student `json:"data"`
 }
 
-// Function for handling errors
-func checkErr(err error) {
-    if err != nil {
-        panic(err)
-    }
+type JsonResponseOther struct {
+    Type    string `json:"type"`
+    Message string `json:"message"`
+    Data    interface{} `json:"data"`
 }
+
+// Function for handling errors
+// func checkErr(err error) {
+//     if err != nil {
+//         panic(err)
+//     }
+// }
 
 // DB set up
 func setupDB() *sql.DB {
     dbinfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
     db, err := sql.Open("postgres", dbinfo)
 
-    checkErr(err)
+    utils.checkErr(err)
 
     return db
 }
@@ -62,6 +70,7 @@ func main() {
   
     router.HandleFunc("/students", GetStudents).Methods("GET")
 
+  // to insert data
     router.HandleFunc("/students", CreateStudents).Methods("POST")
 
 
@@ -94,7 +103,7 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
     rows, err := db.Query("SELECT * FROM students")
 
     // check errors
-    checkErr(err)
+    utils.CheckErr(err)
 
     // var response []JsonResponse
     var students []Student
@@ -119,30 +128,31 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateStudents(w http.ResponseWriter, r *http.Request) {
+  
     id := r.FormValue("id")
     name := r.FormValue("name")
     gender := r.FormValue("gender")
-  
-  
 
-    var response = JsonResponse{}
+    var response = JsonResponseOther{}
 
     if id == "" || name == "" {
-        response = JsonResponse{Type: "error", Message: "You are missing id or name parameter."}
+        response = JsonResponseOther{Type: "error", Message: "You are missing id or name parameter."}
     } else {
         db := setupDB()
 
-        printMessage("Inserting movie into DB")
+        printMessage("Inserting student into DB")
 
         fmt.Println("Inserting new student with ID: " + id + " and name: " + name)
 
         var lastInsertID int
     err := db.QueryRow("INSERT INTO students(id, name, gender) VALUES($1, $2, $3) returning id;", id, name, gender).Scan(&lastInsertID)
 
-    // check errors
-    checkErr(err)
+      fmt.Println(lastInsertID)
 
-    response = JsonResponse{Type: "success", Message: "The student has been inserted successfully!"}
+    // check errors
+    utils.CheckErr(err)
+
+    response = JsonResponseOther{Type: "success", Message: "The student has been inserted successfully!", Data: lastInsertID}
     }
 
     json.NewEncoder(w).Encode(response)

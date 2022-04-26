@@ -93,6 +93,7 @@ Standardize the structure of a consistent response format every time a request i
 Complete Web API, so it's can get student details, update and delete student data.
 Endpoint
 - GET /students/:id <br>
+/students/6
   response :
   ```json
   {
@@ -100,14 +101,14 @@ Endpoint
     "message": "",
     "data": [
       {
-         "id": 1, 
-          "name": "Chaplin",
+         "id": 6, 
+          "name": "John Doe",
           "gender": "M"
       }
     ]
   }
   ```
-- PATCH /students/:id <br>
+- PUT /students/:id <br>
   request :
    - id
    - name
@@ -140,3 +141,4 @@ Endpoint
 - https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
 - https://www.redhat.com/en/topics/integration/whats-the-difference-between-soap-rest
 - https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/
+- https://gist.github.com/BeattieM/324063512d166122ba5c

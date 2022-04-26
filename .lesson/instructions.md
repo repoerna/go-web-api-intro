@@ -20,6 +20,8 @@ In general, an interface is a device or a system that unrelated entities use to 
 
 API is the acronym for Application Programming Interface, which is a software intermediary that allows two applications to talk to each other. Each time you use an app like Facebook, send an instant message, or check the weather on your phone, you’re using an API.
 
+![waiter](https://i.stack.imgur.com/ChtPo.png)
+
 ### REST
 REST is an acronym for REpresentational State Transfer and an architectural style for distributed hypermedia systems. Roy Fielding first presented it in 2000 in his famous dissertation.
 
@@ -37,7 +39,14 @@ Consistent naming and url patterns will make for a good, easy-to-understand API.
 /product/delete/123
 ```
 
-The five urls above are read once, you understand right away, number one is for displaying all products and the next number, I don't need to explain it anymore.
+in REST we can use:
+```
+GET /product
+GET /product/123
+POST /product
+PATCH /product/123
+DELETE /product/123
+```
 
 #### HTTP Verb
 Every request made must define an http method so that the API knows what it wants. Here are four http requests that are often used:
@@ -74,9 +83,60 @@ Standardize the structure of a consistent response format every time a request i
 }
 ```
 
+## How FrontEnd Interact with Backend
+
+![fe-be](https://www.researchgate.net/profile/Octavian-Dospinescu/publication/316675285/figure/fig4/AS:490411216117762@1493934553127/REST-API-integrated-with-frontend-technology-using-AJAX-and-JQuery.png)
+
 ## Lets Create Our REST API!
+
+## Assignment
+Complete Web API, so it's can get student details, update and delete student data.
+Endpoint
+- GET /students/:id <br>
+  response :
+  ```json
+  {
+    "type": "success",
+    "message": "",
+    "data": [
+      {
+         "id": 1, 
+          "name": "Chaplin",
+          "gender": "M"
+      }
+    ]
+  }
+  ```
+- PATCH /students/:id <br>
+  request :
+   - id
+   - name
+   - gender
+  
+  response :
+  ```json
+  {
+    "type": "success",
+    "message": "successfully updated",
+    "data": []
+  }
+  ```
+- DELETE /students/:id <br>
+  response :
+  ```json
+  {
+    "type": "success",
+    "message": "successfully updated",
+    "data": []
+  }
+  ```
+
+  _**Hint: use r.URL.Path to get dynamic ID on URL**_
+
+
 ## Reference
 - https://www.iitk.ac.in/esc101/05Aug/tutorial/java/concepts/interface.html
 - https://restfulapi.net/
 - https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
 - https://www.redhat.com/en/topics/integration/whats-the-difference-between-soap-rest
+- https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/
